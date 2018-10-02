@@ -10,7 +10,7 @@ mongoose.Promise = global.Promise;
 
 // Create config.js
 const {PORT, DATABASE_URL } = require("./config");
-const { BlogPost } = require("./models");
+const { BlogPost, Author } = require("./models");
 
 // Initialize app object
 const app = express();
@@ -26,7 +26,7 @@ app.use(express.json());
       .then(blogposts => {
         res.json({
           blogposts: blogposts.map(
-            (blogpost) => blogpost.serialize())
+            (blogpost) => blogpost.serializeNoComments())
         });
       })
       .catch(
@@ -50,7 +50,7 @@ app.use(express.json());
   // POST /posts
   app.post('/posts', (req, res) => {
     // Verify require fields
-    const requiredFields = ['title', 'content', 'author'];
+    const requiredFields = ['title', 'content', 'author_id'];
     for (let i = 0; i < requiredFields.length; i++) {
       const field = requiredFields[i];
       if (!(field in req.body)) {
@@ -60,10 +60,15 @@ app.use(express.json());
       }
     }
     
+    // Verify author_id exists in author collections
+    if (!Author.findById(req.body.author_id)) {
+      return res.status(500).send('Internal server error');
+    }
+    
     BlogPost.create({
       title: req.body.title,
       content: req.body.content,
-      author: req.body.author,
+      author: req.body.author_id,
       created: req.body.created
     })
       .then(blogpost => res.status(201).json(blogpost.serialize()))
@@ -86,7 +91,7 @@ app.use(express.json());
     
     // Only updated accepted fields
     const toUpdate = {};
-    const updateableFields = ['title', 'content', 'author'];
+    const updateableFields = ['title', 'content'];
 
     updateableFields.forEach(field =>{
       if (field in req.body) {
@@ -97,7 +102,7 @@ app.use(express.json());
     // Update the entry
     BlogPost
       .findByIdAndUpdate(req.params.id, {$set: toUpdate})
-      .then(restaurant => res.status(204).end())
+      .then(blogpost => res.status(200).json(blogpost.serializeNoComments()))
       .catch(err => res.status(500).json({message: 'Internal server error'}));
   });
   
@@ -107,6 +112,16 @@ app.use(express.json());
     .then(blogpost => res.status(204).end())
     .catch(err => res.status(500).json({message: 'Internal server error'}));
   });
+
+  // CREATE author
+  
+  
+  // UPDATE author
+  
+  // DELETE author
+
+
+
 
   // Catch all for non-existent endpoints
   app.use('*', (req, res) => {

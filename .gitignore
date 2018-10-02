@@ -1,3 +1,5 @@
 node_modules
 TODO.txt
 seed-data.json
+authors-seed-data.json
+blogposts-seed-data.json
