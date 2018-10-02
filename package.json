@@ -1,0 +1,22 @@
+{
+  "name": "mongoose-blog-api",
+  "version": "1.0.0",
+  "description": "Thinkful project: Creating a Node/Mongoose blog API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjlutterbie/node-mongoose-blog-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sjlutterbie/node-mongoose-blog-api/issues"
+  },
+  "homepage": "https://github.com/sjlutterbie/node-mongoose-blog-api#readme",
+  "dependencies": {
+    "uuid": "^3.3.2"
+  }
+}
