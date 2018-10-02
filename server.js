@@ -208,6 +208,12 @@ app.use(express.json());
   
   // DELETE author
   app.delete('/authors/:id', (req, res) => {
+    // Delete the author's posts
+    BlogPost.deleteMany({author: req.params.id}, err => {
+      if (err) return res.status(500).json({message: 'Internal server error'});
+    });
+    
+    // Delete the author
     Author.findByIdAndRemove(req.params.id)
     .then(author => res.status(204).end())
     .catch(err => res.status(500).json({message: 'Internal server error'}));
