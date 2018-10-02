@@ -18,7 +18,7 @@ app.use(express.json());
 
 // ROUTES
 
-  // Basic GET Request for dev purposes
+  // GET all posts
   app.get('/posts', (req, res) => {
     BlogPost
       .find()
@@ -35,7 +35,28 @@ app.use(express.json());
           res.status(500).json({message: 'Internal server error'});
         });
   });
+  
+  // GET /posts/:id
+  app.get('/posts/:id', (req, res) => {
+    BlogPost
+      .findById(req.params.id)
+      .then(blogpost => res.json(blogpost.serialize()))
+      .catch( err => {
+        console.error(err);
+        res.status(500).json({message: 'Internal server error'});
+      });
+  });
+    
 
+  // POST /posts
+    // Expected request body & requirements in Challenge documentation
+    // TODO
+
+  // PUT /posts/:id
+    // Expected request body & requirements in Challenge documentation
+    // TODO
+  
+  // DELETE /posts/:id
 
 // SERVER LAUNCH CODE
 
