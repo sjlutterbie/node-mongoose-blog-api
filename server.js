@@ -19,8 +19,24 @@ app.use(express.json());
 // ROUTES
 
   // Basic GET Request for dev purposes
-    // TODO
-    
+  app.get('/posts', (req, res) => {
+    BlogPost
+      .find()
+      .limit(10)
+      .then(blogposts => {
+        res.json({
+          blogposts: blogposts.map(
+            (blogpost) => blogpost.serialize())
+        });
+      })
+      .catch(
+        err => {
+          console.error(err);
+          res.status(500).json({message: 'Internal server error'});
+        });
+  });
+
+
 // SERVER LAUNCH CODE
 
 // Create server object
