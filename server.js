@@ -101,8 +101,17 @@ app.use(express.json());
       .catch(err => res.status(500).json({message: 'Internal server error'}));
   });
   
-
   // DELETE /posts/:id
+  app.delete('/posts/:id', (req, res) => {
+    BlogPost.findByIdAndRemove(req.params.id)
+    .then(blogpost => res.status(204).end())
+    .catch(err => res.status(500).json({message: 'Internal server error'}));
+  });
+
+  // Catch all for non-existent endpoints
+  app.use('*', (req, res) => {
+    res.status(404).json({message: 'Not found'});
+  });
 
 // SERVER LAUNCH CODE
 
