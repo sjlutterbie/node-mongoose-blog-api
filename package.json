@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/sjlutterbie/node-mongoose-blog-api#readme",
   "dependencies": {
+    "express": "^4.16.3",
+    "mongoose": "^5.3.1",
     "uuid": "^3.3.2"
   }
 }
