@@ -73,12 +73,35 @@ app.use(express.json());
       });
   });
   
+  // PUT /posts/:id
+  app.put('/posts/:id', (req, res) => {
+    // Confirm params & body id fields match
+    if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+      const message = 
+      `Request path id (${req.params.id}) and request body id ` +
+      `(${req.body.id}) must match`;
+      console.error(message);
+      return res.status(400).json({message: message});
+    }
+    
+    // Only updated accepted fields
+    const toUpdate = {};
+    const updateableFields = ['title', 'content', 'author'];
+
+    updateableFields.forEach(field =>{
+      if (field in req.body) {
+        toUpdate[field] = req.body[field];
+      }
+    });
+    
+    // Update the entry
+    BlogPost
+      .findByIdAndUpdate(req.params.id, {$set: toUpdate})
+      .then(restaurant => res.status(204).end())
+      .catch(err => res.status(500).json({message: 'Internal server error'}));
+  });
   
 
-  // PUT /posts/:id
-    // Expected request body & requirements in Challenge documentation
-    // TODO
-  
   // DELETE /posts/:id
 
 // SERVER LAUNCH CODE
